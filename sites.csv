@@ -1,0 +1,4 @@
+site_name,power_mw,water_million_gallons,land_cost_per_acre,fiber_latency_ms,tax_incentive_pct,risk_score
+SiteA,100,2.5,20000,5,5,0.2
+SiteB,80,3.0,15000,10,10,0.1
+SiteC,60,1.5,10000,3,8,0.3
