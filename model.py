@@ -7,6 +7,7 @@ compute an overall score, and writes the results to an output file.
 from __future__ import annotations
 
 import csv
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
@@ -28,6 +29,8 @@ class Site:
 
 
 def normalize(values: List[float]) -> List[float]:
+    if not values or not all(math.isfinite(value) for value in values):
+        raise ValueError("Site metrics must contain finite numeric values")
     arr = np.array(values, dtype=float)
     min_val, max_val = arr.min(), arr.max()
     if max_val == min_val:
@@ -95,7 +98,12 @@ def main(input: Path, output: Path):
                 risk_score=float(row["risk_score"]),
             )
             sites.append(site)
-    compute_scores(sites)
+    if not sites:
+        raise click.ClickException("Input CSV must contain at least one site")
+    try:
+        compute_scores(sites)
+    except ValueError as exc:
+        raise click.ClickException(str(exc)) from exc
     with output.open("w", newline="", encoding="utf-8") as f:
         fieldnames = [
             "site_name",
