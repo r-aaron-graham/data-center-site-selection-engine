@@ -1,30 +1,30 @@
-# Data Center Site Selection Engine
+# Data center site selection engine
 
-This repository implements a simple scoring engine to evaluate potential
-sites for building or expanding data centers.  Each candidate site is
-scored on criteria such as power availability, water access, land cost,
-fiber connectivity, government incentives, and risk factors (e.g.
-seismic, flood).  The aggregated score can be used to rank locations
-for further due diligence.
+A CLI that scores illustrative candidate sites using power, water, land cost,
+fiber latency, incentives, and a supplied risk score. It normalizes each
+criterion across the input candidates and applies weights in `model.py`.
+Higher power, water, and incentives increase the score. Higher cost, latency,
+and risk reduce it.
 
-## Usage
-
-Install the required dependencies and run the scoring script on a CSV
-file containing site metrics:
+## Run the example
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python model.py --input data/sites.csv --output scores.csv
 ```
 
-The input CSV must include columns: `site_name`, `power_mw`,
-`water_million_gallons`, `land_cost_per_acre`, `fiber_latency_ms`,
-`tax_incentive_pct`, `risk_score`.  The script computes a normalized
-score for each site and writes the results to `scores.csv`.
+`scores.csv` preserves the input rows and adds the score. Scores are relative
+to the supplied candidate set, so adding sites can change existing scores.
+The sample values are illustrative. A real site decision requires validated
+inputs and engineering due diligence.
 
-## Extending
+Input columns are `site_name`, `power_mw`, `water_million_gallons`,
+`land_cost_per_acre`, `fiber_latency_ms`, `tax_incentive_pct`, and `risk_score`.
+An empty CSV or nonfinite metric produces an error before output is written.
 
-Adjust the weights in `model.py` to reflect your priorities.  For
-example, if water is scarce, increase its weight relative to other
-factors.  You can also add new criteria by extending the `Site` data
-class and updating the scoring logic.
+## Verify
+
+```bash
+python -m pip install pytest
+python -m pytest -q
+```
