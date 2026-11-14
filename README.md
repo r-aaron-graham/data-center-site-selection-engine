@@ -28,3 +28,16 @@ An empty CSV or nonfinite metric produces an error before output is written.
 python -m pip install pytest
 python -m pytest -q
 ```
+
+## Deployment verification
+
+Use Python 3.12 on Linux. CI and the container use the checked-in dependency constraints.
+
+```sh
+python -m pip install -c requirements.lock -r requirements-dev.txt
+python -m pytest -q
+docker build -t reviewer-smoke .
+docker run --rm reviewer-smoke
+```
+
+The container writes its example output inside the container and exits. To retain the CSV, mount a writable output directory and provide an output path under that mount. The CSV fixture uses illustrative sites. Scores are relative to the supplied candidates.
