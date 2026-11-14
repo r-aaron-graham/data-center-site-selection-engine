@@ -1,0 +1,8 @@
+# Python 3.12 on Linux. Use with pip -c requirements.lock.
+click==8.1.7
+iniconfig==2.3.1
+numpy==1.26.4
+packaging==26.3
+pluggy==1.7.0
+pygments==2.21.0
+pytest==9.0.3
